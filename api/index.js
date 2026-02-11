@@ -37,7 +37,6 @@ app.use(bodyParser.json({ limit: "50mb" }));
 const catchErrors = (fn) => async (req, res) => {
   try {
     await fn(req, res);
-    save();
   } catch (err) {
     if (err instanceof InputError) {
       return res.status(400).json({ error: err.message });
