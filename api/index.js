@@ -2,7 +2,11 @@ import bodyParser from "body-parser";
 import cors from "cors";
 import express from "express";
 import swaggerUi from "swagger-ui-express";
-import swaggerDocument from "../swagger.json" assert { type: "json" };
+import { createRequire } from "module";
+
+const require = createRequire(import.meta.url);
+const swaggerDocument = require("../swagger.json");
+
 import { AccessError, InputError } from "./error.js";
 import {
   getEmailFromAuthorization,
@@ -13,10 +17,12 @@ import {
   save,
   setStore,
 } from "./service.js";
-const { PROD_BACKEND_PORT, USE_VERCEL_KV } = process.env;
 
 const app = express();
 
+/***************************************************************
+                        Health Check
+***************************************************************/
 app.get("/ping", (req, res) => {
   return res.status(200).json({ message: "pong" });
 });
@@ -25,31 +31,36 @@ app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json({ limit: "50mb" }));
 
+/***************************************************************
+                        Error Wrapper
+***************************************************************/
 const catchErrors = (fn) => async (req, res) => {
   try {
     await fn(req, res);
     save();
   } catch (err) {
     if (err instanceof InputError) {
-      res.status(400).send({ error: err.message });
+      return res.status(400).json({ error: err.message });
     } else if (err instanceof AccessError) {
-      res.status(403).send({ error: err.message });
+      return res.status(403).json({ error: err.message });
     } else {
-      console.log(err);
-      res.status(500).send({ error: "A system error ocurred" });
+      console.error(err);
+      return res.status(500).json({ error: "A system error occurred" });
     }
   }
 };
 
 /***************************************************************
-                       Auth Function
+                        Auth Middleware
 ***************************************************************/
-
 const authed = (fn) => async (req, res) => {
   const email = getEmailFromAuthorization(req.header("Authorization"));
   await fn(req, res, email);
 };
 
+/***************************************************************
+                        Auth Routes
+***************************************************************/
 app.post(
   "/admin/auth/login",
   catchErrors(async (req, res) => {
@@ -79,9 +90,8 @@ app.post(
 );
 
 /***************************************************************
-                       Store Functions
+                        Store Routes
 ***************************************************************/
-
 app.get(
   "/store",
   catchErrors(
@@ -103,11 +113,9 @@ app.put(
 );
 
 /***************************************************************
-                       Running Server
+                        Docs + Root
 ***************************************************************/
-
 app.get("/", (req, res) => res.redirect("/docs"));
-
 app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 export default app;
