@@ -17,6 +17,10 @@ const { PROD_BACKEND_PORT, USE_VERCEL_KV } = process.env;
 
 const app = express();
 
+app.get("/ping", (req, res) => {
+  return res.status(200).json({ message: "pong" });
+});
+
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json({ limit: "50mb" }));
