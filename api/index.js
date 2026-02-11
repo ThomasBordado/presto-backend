@@ -118,4 +118,7 @@ app.put(
 app.get("/", (req, res) => res.redirect("/docs"));
 app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-export default app;
+export default (req, res) => {
+  return app(req, res);
+};
+
