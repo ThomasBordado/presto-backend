@@ -5,7 +5,7 @@ import swaggerUi from "swagger-ui-express";
 import { createRequire } from "module";
 const require = createRequire(import.meta.url);
 const swaggerDocument = require("../swagger.json");
-import { AccessError, InputError } from "./error";
+import { AccessError, InputError } from "./error.js";
 import {
   getEmailFromAuthorization,
   getStore,
@@ -14,7 +14,7 @@ import {
   register,
   save,
   setStore,
-} from "./service";
+} from "./service.js";
 const { PROD_BACKEND_PORT, USE_VERCEL_KV } = process.env;
 
 const app = express();
