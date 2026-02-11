@@ -2,7 +2,9 @@ import bodyParser from "body-parser";
 import cors from "cors";
 import express from "express";
 import swaggerUi from "swagger-ui-express";
-import swaggerDocument from "../swagger.json" assert { type: "json" };
+import { createRequire } from "module";
+const require = createRequire(import.meta.url);
+const swaggerDocument = require("../swagger.json");
 import { AccessError, InputError } from "./error";
 import {
   getEmailFromAuthorization,
