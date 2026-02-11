@@ -60,30 +60,31 @@ export const reset = () => {
   admins = {};
 };
 
-try {
-  if (USE_VERCEL_KV) {
-    // Setup default admin object in KV DB
-    save();
+// try {
+//   if (USE_VERCEL_KV) {
+//     // Setup default admin object in KV DB
+//     save();
 
-    // Read from Vercel KV
-    fetch(`${KV_REST_API_URL}/get/admins`, {
-      headers: {
-        Authorization: `Bearer ${KV_REST_API_TOKEN}`,
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        admins = JSON.parse(data.result)["admins"];
-      });
-  } else {
-    // Read from local file
-    const data = JSON.parse(fs.readFileSync(DATABASE_FILE));
-    admins = data.admins;
-  }
-} catch(error) {
-  console.log("WARNING: No database found, create a new one");
-  save();
-}
+//     // Read from Vercel KV
+//     fetch(`${KV_REST_API_URL}/get/admins`, {
+//       headers: {
+//         Authorization: `Bearer ${KV_REST_API_TOKEN}`,
+//       },
+//     })
+//       .then((response) => response.json())
+//       .then((data) => {
+//         admins = JSON.parse(data.result)["admins"];
+//       });
+//   } else {
+//     // Read from local file
+//     const data = JSON.parse(fs.readFileSync(DATABASE_FILE));
+//     admins = data.admins;
+//   }
+// } catch(error) {
+//   console.log("WARNING: No database found, create a new one");
+//   save();
+// }
+admins = {};
 
 /***************************************************************
                        Helper Functions
