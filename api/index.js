@@ -14,7 +14,6 @@ import {
   login,
   logout,
   register,
-  save,
   setStore,
 } from "./service.js";
 
