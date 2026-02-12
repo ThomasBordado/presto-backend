@@ -2,7 +2,8 @@
 
 Backend service for the Presto presentation platform. Provides authentication and data storage for presentation management.
 
-**🌐 Live API:** https://presto-backend.vercel.app *(will update after deployment)*
+**Live API:** https://presto-backend-kappa.vercel.app  
+**API Docs:** https://presto-backend-kappa.vercel.app/docs
 
 ---
 
@@ -120,7 +121,7 @@ Deployed on Vercel as serverless functions with automatic deployments from the m
 - `KV_REST_API_URL` - Automatically set by Vercel KV
 - `KV_REST_API_TOKEN` - Automatically set by Vercel KV
 
-**Live API:** https://presto-backend.vercel.app *(will update)*
+**Live API:** https://presto-backend-kappa.vercel.app
 
 ---
 
